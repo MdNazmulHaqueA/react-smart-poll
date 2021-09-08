@@ -1,10 +1,32 @@
 import React, { Component } from 'react';
-
+import { Input, Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import PollList from './poll-list';
+import PollForm from '../poll-form';
 class Sidebar extends Component {
+    state = {
+        openModal: false
+    };
+    toggleModal = () => {
+        this.setState({ openModal: !this.state.openModal });
+    };
     render() {
         return (
-            <div>
-                <h1>Sidebar Component</h1>
+            <div style={{ background: 'efefef', padding: '10px' }}>
+                <div className="d-flex mb-5">
+                    <Input type="search" placeholder="Search" value={this.props.searchTerm} onChange={e => this.props.handleSearch(e.target.value)} />
+                    <Button color="success" className="ml-2" onClick={this.toggleModal}>
+                        New
+                    </Button>
+                </div>
+                <h3>List of polls</h3>
+                <hr />
+                <PollList polls={this.props.polls} selectPoll={this.props.selectPoll} />
+                <Modal isOpen={this.state.openModal} toggle={this.toggleModal} unmountOnClose={true}>
+                    <ModalHeader toggle={this.toggleModal}>Create A New Poll</ModalHeader>
+                    <ModalBody>
+                        <PollForm submit={this.props.addNewPoll} />
+                    </ModalBody>
+                </Modal>
             </div>
         );
     }
